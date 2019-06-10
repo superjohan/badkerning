@@ -126,34 +126,37 @@ class ViewController: UIViewController {
                     previousFrame.origin = CGPoint(x: left, y: previousFrame.origin.y + (previousFrame.size.height * (2.0 / 3.0)))
                 }
 
-                func setFrame() {
+                func setFrame(previousFrame: CGRect) -> CGRect {
                     label.frame.origin = CGPoint(x: previousFrame.origin.x + previousFrame.size.width, y: previousFrame.origin.y)
+                    return label.frame
                 }
                 
                 if char == " " {
                     var nextIndex = self.text.index(after: i)
                     var nextCharacter = self.text[nextIndex]
+                    var prevFrame = previousFrame
                     label.text = "\(nextCharacter)"
-                    setFrame()
+                    prevFrame = setFrame(previousFrame: prevFrame)
                     
                     while nextCharacter != " " && nextCharacter != "\n" {
                         nextIndex = self.text.index(after: nextIndex)
                         if nextIndex == self.text.indices.endIndex {
                             break
                         }
+                        
                         nextCharacter = self.text[nextIndex]
                         label.text = "\(nextCharacter)"
-
-                        setFrame()
+                        
+                        prevFrame = setFrame(previousFrame: prevFrame)
                     }
                     
                     if label.frame.origin.x > right {
                         label.frame.origin = CGPoint(x: left, y: previousFrame.origin.y + previousFrame.size.height + 4)
                     } else {
-                        setFrame()
+                        previousFrame = setFrame(previousFrame: previousFrame)
                     }
                 } else {
-                    setFrame()
+                    previousFrame = setFrame(previousFrame: previousFrame)
                 }
             } else {
                 label.frame.origin = CGPoint(x: left, y: 0)
