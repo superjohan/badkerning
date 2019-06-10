@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     let audioPlayer: AVAudioPlayer
     let startButton: UIButton
     let qtFoolingBgView: UIView = UIView.init(frame: CGRect.zero)
+    let contentView = UIView()
 
     // MARK: - UIViewController
     
@@ -56,6 +57,10 @@ class ViewController: UIViewController {
         // barely visible tiny view for fooling Quicktime player. completely black images are ignored by QT
         self.view.addSubview(self.qtFoolingBgView)
         
+        self.contentView.isHidden = true
+        self.contentView.backgroundColor = .white
+        self.view.addSubview(self.contentView)
+        
         if !self.autostart {
             self.view.addSubview(self.startButton)
         }
@@ -86,6 +91,8 @@ class ViewController: UIViewController {
         )
 
         self.startButton.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: self.view.bounds.size.height)
+        
+        self.contentView.frame = self.startButton.frame
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -118,6 +125,8 @@ class ViewController: UIViewController {
     
     fileprivate func start() {
         self.audioPlayer.play()
+        
+        self.contentView.isHidden = false
         
         scheduleEvents()
     }
