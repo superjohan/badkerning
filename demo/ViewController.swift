@@ -18,6 +18,9 @@ class ViewController: UIViewController {
     let qtFoolingBgView: UIView = UIView.init(frame: CGRect.zero)
     let contentView = UIView()
 
+    let text = "“Like oratory, music, dance, calligraphy – like anything that lends its grace to language – typography is an art that can be deliberately misused. It is a craft by which the meanings of a text (or its absence of meaning) can be clarified, honored and shared, or knowingly disguised.”\n\nRobert Bringhurst, “The Elements of Typographic Style”"
+    var labels = [UILabel]()
+    
     // MARK: - UIViewController
     
     init() {
@@ -93,6 +96,80 @@ class ViewController: UIViewController {
         self.startButton.frame = CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: self.view.bounds.size.height)
         
         self.contentView.frame = self.startButton.frame
+        
+        createLabels()
+    }
+    
+    private func createLabels() {
+        let textBoxWidth: CGFloat = 510
+        let left = (self.contentView.bounds.size.width / 2.0) - (textBoxWidth / 2.0)
+        let right = left + textBoxWidth
+        let font = UIFont(name: "Palatino", size: 20)
+        
+        var previousFrame: CGRect? = nil
+        
+        for i in self.text.indices {
+            let char = self.text[i]
+        
+            let label = UILabel(frame: .zero)
+            label.text = "\(char)"
+            label.font = font
+            label.sizeToFit()
+
+            if char != " " && char != "\n" {
+                self.contentView.addSubview(label)
+                self.labels.append(label)
+            }
+
+            if var previousFrame = previousFrame {
+                if char == "\n" {
+                    previousFrame.origin = CGPoint(x: left, y: previousFrame.origin.y + (previousFrame.size.height * (2.0 / 3.0)))
+                }
+
+                func setFrame() {
+                    label.frame.origin = CGPoint(x: previousFrame.origin.x + previousFrame.size.width, y: previousFrame.origin.y)
+                }
+                
+                if char == " " {
+                    var nextIndex = self.text.index(after: i)
+                    var nextCharacter = self.text[nextIndex]
+                    label.text = "\(nextCharacter)"
+                    setFrame()
+                    
+                    while nextCharacter != " " && nextCharacter != "\n" {
+                        nextIndex = self.text.index(after: nextIndex)
+                        if nextIndex == self.text.indices.endIndex {
+                            break
+                        }
+                        nextCharacter = self.text[nextIndex]
+                        label.text = "\(nextCharacter)"
+
+                        setFrame()
+                    }
+                    
+                    if label.frame.origin.x > right {
+                        label.frame.origin = CGPoint(x: left, y: previousFrame.origin.y + previousFrame.size.height + 4)
+                    } else {
+                        setFrame()
+                    }
+                } else {
+                    setFrame()
+                }
+            } else {
+                label.frame.origin = CGPoint(x: left, y: 0)
+            }
+            
+            previousFrame = label.frame
+        }
+        
+        guard let lastLabel = self.labels.last else { return }
+        
+        let boxHeight = lastLabel.frame.origin.y + lastLabel.bounds.size.height
+        let top = (self.contentView.bounds.size.height / 2.0) - (boxHeight / 2.0)
+        
+        for label in self.labels {
+            label.frame.origin.y += top
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
