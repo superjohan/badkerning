@@ -12,6 +12,7 @@ import Foundation
 
 class ViewController: UIViewController {
     let autostart = true
+    let animationDuration = 0.4
     
     let audioPlayer: AVAudioPlayer
     let startButton: UIButton
@@ -278,13 +279,15 @@ class ViewController: UIViewController {
             for (index, label) in shuffledLabels[startIndex..<(startIndex + charactersPerSide)].enumerated() {
                 label.layer.removeAllAnimations()
                 
-                UIView.animate(withDuration: 0.1, delay: 0, options: [.curveEaseOut], animations: {
+                UIView.animate(withDuration: self.animationDuration, delay: 0, options: [.curveEaseOut], animations: {
                     if down {
                         label.center = CGPoint(x: startPosition.x, y: startPosition.y + (CGFloat(index) * distance))
                     } else {
                         label.center = CGPoint(x: startPosition.x + (CGFloat(index) * distance), y: startPosition.y)
                     }
-                }, completion: nil)
+                }, completion: { _ in
+                    self.animateCharacter(label, small: true)
+                })
             }
         }
         
@@ -330,13 +333,15 @@ class ViewController: UIViewController {
             for (index, label) in slice.enumerated() {
                 label.layer.removeAllAnimations()
                 
-                UIView.animate(withDuration: 0.1, delay: 0, options: [.curveEaseOut], animations: {
+                UIView.animate(withDuration: self.animationDuration, delay: 0, options: [.curveEaseOut], animations: {
                     if down {
                         label.center = CGPoint(x: startPosition.x, y: startPosition.y + (CGFloat(index) * distance))
                     } else {
                         label.center = CGPoint(x: startPosition.x + (CGFloat(index) * distance), y: startPosition.y)
                     }
-                }, completion: nil)
+                }, completion: { _ in
+                    self.animateCharacter(label, small: true)
+                })
             }
         }
 
@@ -347,15 +352,15 @@ class ViewController: UIViewController {
         }
     }
     
-    private func animateCharacter(_ label: UIView) {
-        let offset: CGFloat = 20
+    private func animateCharacter(_ label: UIView, small: Bool = false) {
+        let offset: CGFloat = small ? 5 : 20
         let x = -offset + CGFloat.random(in: 0...(offset * 2))
         let y = -offset + CGFloat.random(in: 0...(offset * 2))
         
-        UIView.animate(withDuration: 0.1, delay: 0, options: [.curveLinear], animations: {
+        UIView.animate(withDuration: self.animationDuration, delay: 0, options: [.curveLinear], animations: {
             label.center = CGPoint(x: label.center.x + x, y: label.center.y + y)
         }, completion: { _ in
-            UIView.animate(withDuration: 16, delay: 0, options: [.curveEaseOut], animations: {
+            UIView.animate(withDuration: 1, delay: 0, options: [.curveEaseOut], animations: {
                 label.center = CGPoint(x: label.center.x + x, y: label.center.y + y)
             }, completion: nil)
         })
