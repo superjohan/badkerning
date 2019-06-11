@@ -237,7 +237,6 @@ class ViewController: UIViewController {
         let y = -offset + CGFloat.random(in: 0...(offset * 2))
         
         self.contentView.center = CGPoint(x: self.view.center.x + x, y: self.view.center.y + y)
-        self.contentView.layer.removeAllAnimations()
         
         UIView.animate(withDuration: long ? 0.2 : 0.1, delay: 0, usingSpringWithDamping: 0.1, initialSpringVelocity: 0.2, options: [.curveEaseOut], animations: {
             self.contentView.center = self.view.center
@@ -262,6 +261,40 @@ class ViewController: UIViewController {
                     label.center = CGPoint(x: label.center.x + x, y: label.center.y + y)
                 }, completion: nil)
             })
+        }
+    }
+    
+    private func square() {
+        let maxLength = self.view.bounds.size.height - 40
+        let length = CGFloat.random(in: 50...maxLength)
+        let shuffledLabels = self.labels.shuffled()
+        let charactersPerSide = shuffledLabels.count / 4
+        
+        for i in 0...3 {
+            let startIndex = i * charactersPerSide
+            let down = i % 2 == 0
+            let startPosition: CGPoint
+            switch i {
+            case 0: startPosition = CGPoint(x: self.view.center.x - (length / 2.0), y: self.view.center.y - (length / 2.0))
+            case 1: startPosition = CGPoint(x: self.view.center.x - (length / 2.0), y: self.view.center.y - (length / 2.0))
+            case 2: startPosition = CGPoint(x: self.view.center.x + (length / 2.0), y: self.view.center.y - (length / 2.0))
+            case 3: startPosition = CGPoint(x: self.view.center.x - (length / 2.0), y: self.view.center.y + (length / 2.0))
+            default: abort()
+            }
+            
+            let distance = length / CGFloat(charactersPerSide)
+            
+            for (index, label) in shuffledLabels[startIndex..<(startIndex + charactersPerSide)].enumerated() {
+                label.layer.removeAllAnimations()
+                
+                UIView.animate(withDuration: 0.1, delay: 0, options: [.curveEaseOut], animations: {
+                    if down {
+                        label.center = CGPoint(x: startPosition.x, y: startPosition.y + (CGFloat(index) * distance))
+                    } else {
+                        label.center = CGPoint(x: startPosition.x + (CGFloat(index) * distance), y: startPosition.y)
+                    }
+                }, completion: nil)
+            }
         }
     }
 }
