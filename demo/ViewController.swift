@@ -37,12 +37,12 @@ class ViewController: UIViewController {
         }
 
         let startButtonText =
-            "\"some demo\"\n" +
+            "\"bad kerning\"\n" +
                 "by dekadence\n" +
                 "\n" +
                 "programming and music by ricky martin\n" +
                 "\n" +
-                "presented at some party 2018\n" +
+                "presented at beaches leave 2019\n" +
                 "\n" +
         "tap anywhere to start"
         self.startButton = UIButton.init(type: UIButton.ButtonType.custom)
