@@ -20,6 +20,7 @@ class ViewController: UIViewController {
 
     let text = "“Like oratory, music, dance, calligraphy – like anything that lends its grace to language – typography is an art that can be deliberately misused. It is a craft by which the meanings of a text (or its absence of meaning) can be clarified, honored and shared, or knowingly disguised.”\n\nRobert Bringhurst, “The Elements of Typographic Style”"
     var labels = [UILabel]()
+    var position = 0
     
     // MARK: - UIViewController
     
@@ -221,5 +222,20 @@ class ViewController: UIViewController {
     }
     
     @objc private func event() {
+        shake(long: self.position < 16)
+        
+        self.position += 1
+    }
+    
+    private func shake(long: Bool) {
+        let offset: CGFloat = 20
+        let x = -offset + CGFloat.random(in: 0...(offset * 2))
+        let y = -offset + CGFloat.random(in: 0...(offset * 2))
+        
+        self.contentView.center = CGPoint(x: self.view.center.x + x, y: self.view.center.y + y)
+        
+        UIView.animate(withDuration: long ? 0.2 : 0.1, delay: 0, usingSpringWithDamping: 0.1, initialSpringVelocity: 0.2, options: [.curveEaseOut], animations: {
+            self.contentView.center = self.view.center
+        }, completion: nil)
     }
 }
