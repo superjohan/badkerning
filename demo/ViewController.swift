@@ -245,22 +245,12 @@ class ViewController: UIViewController {
     
     private func randomize() {
         let count = (self.position + 1) * 3
-        let offset: CGFloat = 20
 
         for _ in 0..<count {
             let label = self.labels.randomElement()!
             label.layer.removeAllAnimations()
 
-            let x = -offset + CGFloat.random(in: 0...(offset * 2))
-            let y = -offset + CGFloat.random(in: 0...(offset * 2))
-
-            UIView.animate(withDuration: 0.1, delay: 0, options: [.curveLinear], animations: {
-                label.center = CGPoint(x: label.center.x + x, y: label.center.y + y)
-            }, completion: { _ in
-                UIView.animate(withDuration: 16, delay: 0, options: [.curveEaseOut], animations: {
-                    label.center = CGPoint(x: label.center.x + x, y: label.center.y + y)
-                }, completion: nil)
-            })
+            animateCharacter(label)
         }
     }
     
@@ -274,6 +264,7 @@ class ViewController: UIViewController {
             let startIndex = i * charactersPerSide
             let down = i % 2 == 0
             let startPosition: CGPoint
+
             switch i {
             case 0: startPosition = CGPoint(x: self.view.center.x - (length / 2.0), y: self.view.center.y - (length / 2.0))
             case 1: startPosition = CGPoint(x: self.view.center.x - (length / 2.0), y: self.view.center.y - (length / 2.0))
@@ -296,5 +287,26 @@ class ViewController: UIViewController {
                 }, completion: nil)
             }
         }
+        
+        let remainingCharacters = shuffledLabels[(charactersPerSide * 4)..<shuffledLabels.count]
+
+        for label in remainingCharacters {
+            animateCharacter(label)
+        }
+    }
+    
+    private func animateCharacter(_ label: UIView) {
+        let offset: CGFloat = 20
+        let x = -offset + CGFloat.random(in: 0...(offset * 2))
+        let y = -offset + CGFloat.random(in: 0...(offset * 2))
+        
+        UIView.animate(withDuration: 0.1, delay: 0, options: [.curveLinear], animations: {
+            label.center = CGPoint(x: label.center.x + x, y: label.center.y + y)
+        }, completion: { _ in
+            UIView.animate(withDuration: 16, delay: 0, options: [.curveEaseOut], animations: {
+                label.center = CGPoint(x: label.center.x + x, y: label.center.y + y)
+            }, completion: nil)
+        })
+    }
     }
 }
