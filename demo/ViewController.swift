@@ -206,6 +206,7 @@ class ViewController: UIViewController {
     fileprivate func start() {
         self.audioPlayer.play()
         
+        self.view.backgroundColor = .white
         self.contentView.isHidden = false
         
         scheduleEvents()
