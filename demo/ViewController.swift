@@ -224,6 +224,10 @@ class ViewController: UIViewController {
     @objc private func event() {
         shake(long: self.position < 16)
         
+        if self.position < 16 {
+            randomize()
+        }
+        
         self.position += 1
     }
     
@@ -233,9 +237,31 @@ class ViewController: UIViewController {
         let y = -offset + CGFloat.random(in: 0...(offset * 2))
         
         self.contentView.center = CGPoint(x: self.view.center.x + x, y: self.view.center.y + y)
+        self.contentView.layer.removeAllAnimations()
         
         UIView.animate(withDuration: long ? 0.2 : 0.1, delay: 0, usingSpringWithDamping: 0.1, initialSpringVelocity: 0.2, options: [.curveEaseOut], animations: {
             self.contentView.center = self.view.center
         }, completion: nil)
+    }
+    
+    private func randomize() {
+        let count = (self.position + 1) * 3
+        let offset: CGFloat = 20
+
+        for _ in 0..<count {
+            let label = self.labels.randomElement()!
+            label.layer.removeAllAnimations()
+
+            let x = -offset + CGFloat.random(in: 0...(offset * 2))
+            let y = -offset + CGFloat.random(in: 0...(offset * 2))
+
+            UIView.animate(withDuration: 0.1, delay: 0, options: [.curveLinear], animations: {
+                label.center = CGPoint(x: label.center.x + x, y: label.center.y + y)
+            }, completion: { _ in
+                UIView.animate(withDuration: 16, delay: 0, options: [.curveEaseOut], animations: {
+                    label.center = CGPoint(x: label.center.x + x, y: label.center.y + y)
+                }, completion: nil)
+            })
+        }
     }
 }
