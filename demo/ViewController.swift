@@ -257,7 +257,7 @@ class ViewController: UIViewController {
             let label = self.labels.randomElement()!
             label.layer.removeAllAnimations()
 
-            animateCharacter(label)
+            animateCharacter(label, short: true)
         }
     }
     
@@ -358,15 +358,15 @@ class ViewController: UIViewController {
         }
     }
     
-    private func animateCharacter(_ label: UIView, small: Bool = false) {
+    private func animateCharacter(_ label: UIView, small: Bool = false, short: Bool = false) {
         let offset: CGFloat = small ? 5 : 20
         let x = -offset + CGFloat.random(in: 0...(offset * 2))
         let y = -offset + CGFloat.random(in: 0...(offset * 2))
         
-        UIView.animate(withDuration: self.animationDuration, delay: 0, options: [.curveLinear], animations: {
+        UIView.animate(withDuration: short ? 0.1 : self.animationDuration, delay: 0, options: [.curveLinear], animations: {
             label.center = CGPoint(x: label.center.x + x, y: label.center.y + y)
         }, completion: { _ in
-            UIView.animate(withDuration: 1, delay: 0, options: [.curveEaseOut], animations: {
+            UIView.animate(withDuration: short ? 8 : 1, delay: 0, options: [.curveEaseOut], animations: {
                 label.center = CGPoint(x: label.center.x + x, y: label.center.y + y)
             }, completion: nil)
         })
