@@ -365,5 +365,13 @@ class ViewController: UIViewController {
             }, completion: nil)
         })
     }
+    
+    private enum Shape {
+        case square
+        case rectangle
+        case quad
+        case equilateralTriangle
+        case triangle
+        case circle
     }
 }
