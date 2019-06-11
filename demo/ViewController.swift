@@ -295,6 +295,58 @@ class ViewController: UIViewController {
         }
     }
     
+    private func rectangle() {
+        let maxWidth = self.view.bounds.size.width - 40
+        let maxHeight = self.view.bounds.size.height - 40
+        let width = CGFloat.random(in: 50...maxWidth)
+        let height = CGFloat.random(in: 50...maxHeight)
+        let shuffledLabels = self.labels.shuffled()
+        let totalLength = (width * 2) + (height * 2)
+        let charactersByWidth = Int((width / totalLength) * CGFloat(shuffledLabels.count))
+        let charactersByHeight = Int((height / totalLength) * CGFloat(shuffledLabels.count))
+        let slices = [
+            shuffledLabels[0..<charactersByWidth],
+            shuffledLabels[charactersByWidth..<(charactersByWidth * 2)],
+            shuffledLabels[(charactersByWidth * 2)..<((charactersByWidth * 2) + charactersByHeight)],
+            shuffledLabels[((charactersByWidth * 2) + charactersByHeight)..<((charactersByWidth * 2) + (charactersByHeight * 2))]
+        ]
+        let endIndex = (charactersByWidth * 2) + (charactersByHeight * 2)
+        
+        for i in 0...3 {
+            let slice = slices[i]
+            let down = i >= 2
+            let startPosition: CGPoint
+            
+            switch i {
+            case 0: startPosition = CGPoint(x: self.view.center.x - (width / 2.0), y: self.view.center.y - (height / 2.0))
+            case 1: startPosition = CGPoint(x: self.view.center.x - (width / 2.0), y: self.view.center.y + (height / 2.0))
+            case 2: startPosition = CGPoint(x: self.view.center.x + (width / 2.0), y: self.view.center.y - (height / 2.0))
+            case 3: startPosition = CGPoint(x: self.view.center.x - (width / 2.0), y: self.view.center.y - (height / 2.0))
+            default: abort()
+            }
+            
+            let distance = down ? height / CGFloat(charactersByHeight) : width / CGFloat(charactersByWidth)
+            
+            for (index, label) in slice.enumerated() {
+                label.layer.removeAllAnimations()
+                
+                UIView.animate(withDuration: 0.1, delay: 0, options: [.curveEaseOut], animations: {
+                    if down {
+                        label.center = CGPoint(x: startPosition.x, y: startPosition.y + (CGFloat(index) * distance))
+                    } else {
+                        label.center = CGPoint(x: startPosition.x + (CGFloat(index) * distance), y: startPosition.y)
+                    }
+                }, completion: nil)
+            }
+        }
+
+        let remainingCharacters = shuffledLabels[endIndex..<shuffledLabels.count]
+        
+        for label in remainingCharacters {
+            animateCharacter(label)
+        }
+    }
+    
     private func animateCharacter(_ label: UIView) {
         let offset: CGFloat = 20
         let x = -offset + CGFloat.random(in: 0...(offset * 2))
