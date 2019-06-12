@@ -54,20 +54,21 @@ class ViewController: UIViewController {
         self.startButton.backgroundColor = UIColor.black
         
         let shapeCount = 5
-        let positionsPerShape = self.timestamps.count / shapeCount
         var shapes = [Int]()
-        
-        for i in 0..<shapeCount {
-            for _ in 0..<positionsPerShape {
-                shapes.append(i)
-            }
-        }
+        var lastShape = -1
         
         while shapes.count < self.timestamps.count {
-            shapes.append(Int.random(in: 0..<shapeCount))
+            var shapeBag = (0..<shapeCount).shuffled()
+            while shapeBag.first! == lastShape {
+                shapeBag = (0..<shapeCount).shuffled()
+            }
+            
+            lastShape = shapeBag.last!
+            
+            shapes.append(contentsOf: shapeBag)
         }
         
-        self.shapes = shapes.shuffled()
+        self.shapes = shapes
         
         super.init(nibName: nil, bundle: nil)
         
