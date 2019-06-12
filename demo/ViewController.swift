@@ -264,44 +264,12 @@ class ViewController: UIViewController {
     private func square() {
         let maxLength = self.view.bounds.size.height - 40
         let length = CGFloat.random(in: 50...maxLength)
-        let shuffledLabels = self.labels.shuffled()
-        let charactersPerSide = shuffledLabels.count / 4
+        let point1 = CGPoint(x: self.view.center.x - (length / 2.0), y: self.view.center.y - (length / 2.0))
+        let point2 = CGPoint(x: self.view.center.x + (length / 2.0), y: self.view.center.y - (length / 2.0))
+        let point3 = CGPoint(x: self.view.center.x + (length / 2.0), y: self.view.center.y + (length / 2.0))
+        let point4 = CGPoint(x: self.view.center.x - (length / 2.0), y: self.view.center.y + (length / 2.0))
         
-        for i in 0...3 {
-            let startIndex = i * charactersPerSide
-            let down = i % 2 == 0
-            let startPosition: CGPoint
-
-            switch i {
-            case 0: startPosition = CGPoint(x: self.view.center.x - (length / 2.0), y: self.view.center.y - (length / 2.0))
-            case 1: startPosition = CGPoint(x: self.view.center.x - (length / 2.0), y: self.view.center.y - (length / 2.0))
-            case 2: startPosition = CGPoint(x: self.view.center.x + (length / 2.0), y: self.view.center.y - (length / 2.0))
-            case 3: startPosition = CGPoint(x: self.view.center.x - (length / 2.0), y: self.view.center.y + (length / 2.0))
-            default: abort()
-            }
-            
-            let distance = length / CGFloat(charactersPerSide)
-            
-            for (index, label) in shuffledLabels[startIndex..<(startIndex + charactersPerSide)].enumerated() {
-                label.layer.removeAllAnimations()
-                
-                UIView.animate(withDuration: self.animationDuration, delay: 0, options: [.curveEaseOut], animations: {
-                    if down {
-                        label.center = CGPoint(x: startPosition.x, y: startPosition.y + (CGFloat(index) * distance))
-                    } else {
-                        label.center = CGPoint(x: startPosition.x + (CGFloat(index) * distance), y: startPosition.y)
-                    }
-                }, completion: { _ in
-                    self.animateCharacter(label, small: true)
-                })
-            }
-        }
-        
-        let remainingCharacters = shuffledLabels[(charactersPerSide * 4)..<shuffledLabels.count]
-
-        for label in remainingCharacters {
-            animateCharacter(label)
-        }
+        quad(point1, point2, point3, point4)
     }
     
     private func rectangle() {
@@ -309,53 +277,12 @@ class ViewController: UIViewController {
         let maxHeight = self.view.bounds.size.height - 40
         let width = CGFloat.random(in: 50...maxWidth)
         let height = CGFloat.random(in: 50...maxHeight)
-        let shuffledLabels = self.labels.shuffled()
-        let totalLength = (width * 2) + (height * 2)
-        let charactersByWidth = Int((width / totalLength) * CGFloat(shuffledLabels.count))
-        let charactersByHeight = Int((height / totalLength) * CGFloat(shuffledLabels.count))
-        let slices = [
-            shuffledLabels[0..<charactersByWidth],
-            shuffledLabels[charactersByWidth..<(charactersByWidth * 2)],
-            shuffledLabels[(charactersByWidth * 2)..<((charactersByWidth * 2) + charactersByHeight)],
-            shuffledLabels[((charactersByWidth * 2) + charactersByHeight)..<((charactersByWidth * 2) + (charactersByHeight * 2))]
-        ]
-        let endIndex = (charactersByWidth * 2) + (charactersByHeight * 2)
-        
-        for i in 0...3 {
-            let slice = slices[i]
-            let down = i >= 2
-            let startPosition: CGPoint
-            
-            switch i {
-            case 0: startPosition = CGPoint(x: self.view.center.x - (width / 2.0), y: self.view.center.y - (height / 2.0))
-            case 1: startPosition = CGPoint(x: self.view.center.x - (width / 2.0), y: self.view.center.y + (height / 2.0))
-            case 2: startPosition = CGPoint(x: self.view.center.x + (width / 2.0), y: self.view.center.y - (height / 2.0))
-            case 3: startPosition = CGPoint(x: self.view.center.x - (width / 2.0), y: self.view.center.y - (height / 2.0))
-            default: abort()
-            }
-            
-            let distance = down ? height / CGFloat(charactersByHeight) : width / CGFloat(charactersByWidth)
-            
-            for (index, label) in slice.enumerated() {
-                label.layer.removeAllAnimations()
-                
-                UIView.animate(withDuration: self.animationDuration, delay: 0, options: [.curveEaseOut], animations: {
-                    if down {
-                        label.center = CGPoint(x: startPosition.x, y: startPosition.y + (CGFloat(index) * distance))
-                    } else {
-                        label.center = CGPoint(x: startPosition.x + (CGFloat(index) * distance), y: startPosition.y)
-                    }
-                }, completion: { _ in
-                    self.animateCharacter(label, small: true)
-                })
-            }
-        }
+        let point1 = CGPoint(x: self.view.center.x - (width / 2.0), y: self.view.center.y - (height / 2.0))
+        let point2 = CGPoint(x: self.view.center.x + (width / 2.0), y: self.view.center.y - (height / 2.0))
+        let point3 = CGPoint(x: self.view.center.x + (width / 2.0), y: self.view.center.y + (height / 2.0))
+        let point4 = CGPoint(x: self.view.center.x - (width / 2.0), y: self.view.center.y + (height / 2.0))
 
-        let remainingCharacters = shuffledLabels[endIndex..<shuffledLabels.count]
-        
-        for label in remainingCharacters {
-            animateCharacter(label)
-        }
+        quad(point1, point2, point3, point4)
     }
     
     private func quad() {
