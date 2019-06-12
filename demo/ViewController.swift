@@ -53,17 +53,18 @@ class ViewController: UIViewController {
         self.startButton.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         self.startButton.backgroundColor = UIColor.black
         
-        let positionsPerShape = self.timestamps.count / 3
+        let shapeCount = 4
+        let positionsPerShape = self.timestamps.count / 4
         var shapes = [Int]()
         
-        for i in 0...2 {
+        for i in 0..<shapeCount {
             for _ in 0..<positionsPerShape {
                 shapes.append(i)
             }
         }
         
         while shapes.count < self.timestamps.count {
-            shapes.append(Int.random(in: 0...2))
+            shapes.append(Int.random(in: 0..<shapeCount))
         }
         
         self.shapes = shapes.shuffled()
@@ -247,6 +248,7 @@ class ViewController: UIViewController {
             case 0: rectangle()
             case 1: quad()
             case 2: circle()
+            case 3: triangle()
             default: abort()
             }
         }
@@ -321,6 +323,17 @@ class ViewController: UIViewController {
         }
     }
     
+    private func triangle() {
+        let offset: CGFloat = 40
+        let width = self.view.bounds.size.width
+        let height = self.view.bounds.size.height
+        let point1 = CGPoint(x: CGFloat.random(in: offset...(width - (offset * 2))), y: CGFloat.random(in: offset...(height - (offset * 2))))
+        let point2 = CGPoint(x: CGFloat.random(in: offset...(width - (offset * 2))), y: CGFloat.random(in: offset...(height - (offset * 2))))
+        let point3 = CGPoint(x: CGFloat.random(in: offset...(width - (offset * 2))), y: CGFloat.random(in: offset...(height - (offset * 2))))
+
+        triangle(point1, point2, point3)
+    }
+    
     private func quad(_ point1: CGPoint, _ point2: CGPoint, _ point3: CGPoint, _ point4: CGPoint) {
         let p1p2d = hypot(point1.x - point2.x, point1.y - point2.y)
         let p2p3d = hypot(point2.x - point3.x, point2.y - point3.y)
@@ -342,6 +355,31 @@ class ViewController: UIViewController {
         line(startPoint: point2, endPoint: point3, slice: p2p3slice)
         line(startPoint: point3, endPoint: point4, slice: p3p4slice)
         line(startPoint: point4, endPoint: point1, slice: p4p1slice)
+        
+        let remainingCharacters = shuffledLabels[endIndex..<shuffledLabels.count]
+        
+        for label in remainingCharacters {
+            animateCharacter(label)
+        }
+    }
+    
+    private func triangle(_ point1: CGPoint, _ point2: CGPoint, _ point3: CGPoint) {
+        let p1p2d = hypot(point1.x - point2.x, point1.y - point2.y)
+        let p2p3d = hypot(point2.x - point3.x, point2.y - point3.y)
+        let p3p1d = hypot(point3.x - point1.x, point3.y - point1.y)
+        let totalLength = p1p2d + p2p3d + p3p1d
+        let shuffledLabels = self.labels.shuffled()
+        let p1p2charCount = Int((p1p2d / totalLength) * CGFloat(shuffledLabels.count))
+        let p2p3charCount = Int((p2p3d / totalLength) * CGFloat(shuffledLabels.count))
+        let p3p1charCount = Int((p3p1d / totalLength) * CGFloat(shuffledLabels.count))
+        let p1p2slice = shuffledLabels[0..<p1p2charCount]
+        let p2p3slice = shuffledLabels[p1p2slice.count..<(p1p2slice.count + p2p3charCount)]
+        let p3p1slice = shuffledLabels[(p1p2slice.count + p2p3slice.count)..<(p1p2slice.count + p2p3slice.count + p3p1charCount)]
+        let endIndex = p1p2charCount + p2p3charCount + p3p1charCount
+        
+        line(startPoint: point1, endPoint: point2, slice: p1p2slice)
+        line(startPoint: point2, endPoint: point3, slice: p2p3slice)
+        line(startPoint: point3, endPoint: point1, slice: p3p1slice)
         
         let remainingCharacters = shuffledLabels[endIndex..<shuffledLabels.count]
         
