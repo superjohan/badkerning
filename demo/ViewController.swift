@@ -258,8 +258,9 @@ class ViewController: UIViewController {
     
     private func shake(long: Bool) {
         let offset: CGFloat = 20
-        let x = -offset + CGFloat.random(in: 0...(offset * 2))
-        let y = -offset + CGFloat.random(in: 0...(offset * 2))
+        let sign: CGFloat = Bool.random() ? 1 : -1
+        let x = CGFloat.random(in: offset...(offset * 2)) * sign
+        let y = CGFloat.random(in: offset...(offset * 2)) * sign
         
         self.contentView.center = CGPoint(x: self.view.center.x + x, y: self.view.center.y + y)
         
