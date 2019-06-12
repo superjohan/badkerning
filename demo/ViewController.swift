@@ -228,10 +228,11 @@ class ViewController: UIViewController {
         if self.position < 16 {
             randomize()
         } else {
-            switch Int.random(in: 0...2) {
+            switch Int.random(in: 0...3) {
             case 0: square()
             case 1: rectangle()
             case 2: quad()
+            case 3: circle()
             default: abort()
             }
         }
@@ -296,6 +297,25 @@ class ViewController: UIViewController {
         let point4 = CGPoint(x: CGFloat.random(in: offset...(width - (offset * 2))), y: CGFloat.random(in: offset...(height - (offset * 2))))
         
         quad(point1, point2, point3, point4)
+    }
+    
+    private func circle() {
+        let offset: CGFloat = 40
+        let radius = CGFloat.random(in: 75...((self.view.bounds.size.height / 2.0) - offset))
+        let shuffledLabels = self.labels.shuffled()
+        
+        for (index, label) in shuffledLabels.enumerated() {
+            let angle = (CGFloat(index) / CGFloat(shuffledLabels.count)) * (CGFloat.pi * 2.0)
+            
+            UIView.animate(withDuration: self.animationDuration, delay: 0, options: [.curveEaseOut], animations: {
+                label.center = CGPoint(
+                    x: self.view.center.x + (radius * cos(angle)),
+                    y: self.view.center.y + (radius * sin(angle))
+                )
+            }, completion: { _ in
+                self.animateCharacter(label, small: true)
+            })
+        }
     }
     
     private func quad(_ point1: CGPoint, _ point2: CGPoint, _ point3: CGPoint, _ point4: CGPoint) {
