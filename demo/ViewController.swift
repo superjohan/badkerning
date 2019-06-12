@@ -371,7 +371,49 @@ class ViewController: UIViewController {
     }
     
     private func quad(_ point1: CGPoint, _ point2: CGPoint, _ point3: CGPoint, _ point4: CGPoint) {
+        let p1p2d = hypot(point1.x - point2.x, point1.y - point2.y)
+        let p2p3d = hypot(point2.x - point3.x, point2.y - point3.y)
+        let p3p4d = hypot(point3.x - point4.x, point3.y - point4.y)
+        let p4p1d = hypot(point4.x - point1.x, point4.y - point1.y)
+        let totalLength = p1p2d + p2p3d + p3p4d + p4p1d
+        let shuffledLabels = self.labels.shuffled()
+        let p1p2charCount = Int((p1p2d / totalLength) * CGFloat(shuffledLabels.count))
+        let p2p3charCount = Int((p2p3d / totalLength) * CGFloat(shuffledLabels.count))
+        let p3p4charCount = Int((p3p4d / totalLength) * CGFloat(shuffledLabels.count))
+        let p4p1charCount = Int((p4p1d / totalLength) * CGFloat(shuffledLabels.count))
+        let p1p2slice = shuffledLabels[0..<p1p2charCount]
+        let p2p3slice = shuffledLabels[p1p2slice.count..<(p1p2slice.count + p2p3charCount)]
+        let p3p4slice = shuffledLabels[(p1p2slice.count + p2p3slice.count)..<(p1p2slice.count + p2p3slice.count + p3p4charCount)]
+        let p4p1slice = shuffledLabels[(p1p2slice.count + p2p3slice.count + p3p4charCount)..<(p1p2slice.count + p2p3slice.count + p3p4charCount + p4p1charCount)]
+        let endIndex = p1p2charCount + p2p3charCount + p3p4charCount + p4p1charCount
         
+        line(startPoint: point1, endPoint: point2, slice: p1p2slice)
+        line(startPoint: point2, endPoint: point3, slice: p2p3slice)
+        line(startPoint: point3, endPoint: point4, slice: p3p4slice)
+        line(startPoint: point4, endPoint: point1, slice: p4p1slice)
+        
+        let remainingCharacters = shuffledLabels[endIndex..<shuffledLabels.count]
+        
+        for label in remainingCharacters {
+            animateCharacter(label)
+        }
+    }
+    
+    private func line(startPoint: CGPoint, endPoint: CGPoint, slice: ArraySlice<UILabel>) {
+        for (index, label) in slice.enumerated() {
+            let position = CGFloat(index) / CGFloat(slice.count)
+            
+            label.layer.removeAllAnimations()
+            
+            UIView.animate(withDuration: self.animationDuration, delay: 0, options: [.curveEaseOut], animations: {
+                label.center = CGPoint(
+                    x: ((endPoint.x - startPoint.x) * position) + startPoint.x,
+                    y: ((endPoint.y - startPoint.y) * position) + startPoint.y
+                )
+            }, completion: { _ in
+                self.animateCharacter(label, small: true)
+            })
+        }
     }
     
     private func animateCharacter(_ label: UIView, small: Bool = false, short: Bool = false) {
