@@ -228,10 +228,11 @@ class ViewController: UIViewController {
         if self.position < 16 {
             randomize()
         } else {
-            if Int.random(in: 0...1) == 0 {
-                square()
-            } else {
-                rectangle()
+            switch Int.random(in: 0...2) {
+            case 0: square()
+            case 1: rectangle()
+            case 2: quad()
+            default: abort()
             }
         }
         
