@@ -13,7 +13,8 @@ import Foundation
 class ViewController: UIViewController {
     let autostart = true
     let animationDuration = 0.2
-    
+    let timestamps = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 20.625, 20.75, 21, 21.375, 22, 22.75, 23, 23.375, 24, 24.625, 25, 25.375, 26, 27, 27.375, 28, 29, 30, 30.625, 30.75, 31, 31.375, 32, 32.75, 33, 33.375, 34, 34.625, 35, 35.375, 36, 37, 37.375, 38, 38.625, 38.75, 39, 39.375, 40, 41, 42, 43, 44, 44.625, 44.75, 45, 45.375, 46, 46.75, 47, 47.375, 48, 48.625, 49, 49.375, 50, 51, 51.375, 52, 52.625, 52.75, 53, 53.375, 54, 54.75, 55, 55.375, 56, 56.625, 57, 57.375, 58, 59]
+
     let audioPlayer: AVAudioPlayer
     let startButton: UIButton
     let qtFoolingBgView: UIView = UIView.init(frame: CGRect.zero)
@@ -215,9 +216,7 @@ class ViewController: UIViewController {
     }
     
     private func scheduleEvents() {
-        let timestamps = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 20.625, 20.75, 21, 21.375, 22, 22.75, 23, 23.375, 24, 24.625, 25, 25.375, 26, 27, 27.375, 28, 29, 30, 30.625, 30.75, 31, 31.375, 32, 32.75, 33, 33.375, 34, 34.625, 35, 35.375, 36, 37, 37.375, 38, 38.625, 38.75, 39, 39.375, 40, 41, 42, 43, 44, 44.625, 44.75, 45, 45.375, 46, 46.75, 47, 47.375, 48, 48.625, 49, 49.375, 50, 51, 51.375, 52, 52.625, 52.75, 53, 53.375, 54, 54.75, 55, 55.375, 56, 56.625, 57, 57.375, 58, 59]
-        
-        for timestamp in timestamps {
+        for timestamp in self.timestamps {
             perform(#selector(event), with: nil, afterDelay: timestamp)
         }
     }
