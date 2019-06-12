@@ -358,6 +358,22 @@ class ViewController: UIViewController {
         }
     }
     
+    private func quad() {
+        let offset: CGFloat = 40
+        let width = self.view.bounds.size.width
+        let height = self.view.bounds.size.height
+        let point1 = CGPoint(x: CGFloat.random(in: offset...(width - (offset * 2))), y: CGFloat.random(in: offset...(height - (offset * 2))))
+        let point2 = CGPoint(x: CGFloat.random(in: offset...(width - (offset * 2))), y: CGFloat.random(in: offset...(height - (offset * 2))))
+        let point3 = CGPoint(x: CGFloat.random(in: offset...(width - (offset * 2))), y: CGFloat.random(in: offset...(height - (offset * 2))))
+        let point4 = CGPoint(x: CGFloat.random(in: offset...(width - (offset * 2))), y: CGFloat.random(in: offset...(height - (offset * 2))))
+        
+        quad(point1, point2, point3, point4)
+    }
+    
+    private func quad(_ point1: CGPoint, _ point2: CGPoint, _ point3: CGPoint, _ point4: CGPoint) {
+        
+    }
+    
     private func animateCharacter(_ label: UIView, small: Bool = false, short: Bool = false) {
         let offset: CGFloat = small ? 5 : 20
         let x = -offset + CGFloat.random(in: 0...(offset * 2))
