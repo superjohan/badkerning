@@ -12,7 +12,7 @@ import Foundation
 
 class ViewController: UIViewController {
     let autostart = true
-    let animationDuration = 0.4
+    let animationDuration = 0.2
     
     let audioPlayer: AVAudioPlayer
     let startButton: UIButton
