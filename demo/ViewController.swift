@@ -53,8 +53,8 @@ class ViewController: UIViewController {
         self.startButton.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         self.startButton.backgroundColor = UIColor.black
         
-        let shapeCount = 4
-        let positionsPerShape = self.timestamps.count / 4
+        let shapeCount = 5
+        let positionsPerShape = self.timestamps.count / shapeCount
         var shapes = [Int]()
         
         for i in 0..<shapeCount {
@@ -249,6 +249,7 @@ class ViewController: UIViewController {
             case 1: quad()
             case 2: circle()
             case 3: triangle()
+            case 4: equilateralTriangle()
             default: abort()
             }
         }
@@ -331,6 +332,17 @@ class ViewController: UIViewController {
         let point1 = CGPoint(x: CGFloat.random(in: offset...(width - (offset * 2))), y: CGFloat.random(in: offset...(height - (offset * 2))))
         let point2 = CGPoint(x: CGFloat.random(in: offset...(width - (offset * 2))), y: CGFloat.random(in: offset...(height - (offset * 2))))
         let point3 = CGPoint(x: CGFloat.random(in: offset...(width - (offset * 2))), y: CGFloat.random(in: offset...(height - (offset * 2))))
+
+        triangle(point1, point2, point3)
+    }
+    
+    private func equilateralTriangle() {
+        let offset: CGFloat = 40
+        let height = CGFloat.random(in: 75...(self.view.bounds.size.height - (offset * 2.0)))
+        let sideLength = (2.0 * height) / sqrt(3.0)
+        let point1 = CGPoint(x: (self.view.bounds.size.width / 2.0), y: (self.view.bounds.size.height / 2.0) - (height / 2.0))
+        let point2 = CGPoint(x: (self.view.bounds.size.width / 2.0) + (sideLength / 2.0), y: (self.view.bounds.size.height / 2.0) + (height / 2.0))
+        let point3 = CGPoint(x: (self.view.bounds.size.width / 2.0) - (sideLength / 2.0), y: (self.view.bounds.size.height / 2.0) + (height / 2.0))
 
         triangle(point1, point2, point3)
     }
