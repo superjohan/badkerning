@@ -14,7 +14,8 @@ class ViewController: UIViewController {
     let autostart = true
     let animationDuration = 0.2
     let timestamps = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 20.625, 20.75, 21, 21.375, 22, 22.75, 23, 23.375, 24, 24.625, 25, 25.375, 26, 27, 27.375, 28, 29, 30, 30.625, 30.75, 31, 31.375, 32, 32.75, 33, 33.375, 34, 34.625, 35, 35.375, 36, 37, 37.375, 38, 38.625, 38.75, 39, 39.375, 40, 41, 42, 43, 44, 44.625, 44.75, 45, 45.375, 46, 46.75, 47, 47.375, 48, 48.625, 49, 49.375, 50, 51, 51.375, 52, 52.625, 52.75, 53, 53.375, 54, 54.75, 55, 55.375, 56, 56.625, 57, 57.375, 58, 59]
-
+    let shapes: [Int]
+    
     let audioPlayer: AVAudioPlayer
     let startButton: UIButton
     let qtFoolingBgView: UIView = UIView.init(frame: CGRect.zero)
@@ -51,6 +52,21 @@ class ViewController: UIViewController {
         self.startButton.titleLabel?.numberOfLines = 0
         self.startButton.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         self.startButton.backgroundColor = UIColor.black
+        
+        let positionsPerShape = self.timestamps.count / 3
+        var shapes = [Int]()
+        
+        for i in 0...2 {
+            for _ in 0..<positionsPerShape {
+                shapes.append(i)
+            }
+        }
+        
+        while shapes.count < self.timestamps.count {
+            shapes.append(Int.random(in: 0...2))
+        }
+        
+        self.shapes = shapes.shuffled()
         
         super.init(nibName: nil, bundle: nil)
         
@@ -227,11 +243,10 @@ class ViewController: UIViewController {
         if self.position < 16 {
             randomize()
         } else {
-            switch Int.random(in: 0...3) {
-            case 0: square()
-            case 1: rectangle()
-            case 2: quad()
-            case 3: circle()
+            switch self.shapes[self.position] {
+            case 0: rectangle()
+            case 1: quad()
+            case 2: circle()
             default: abort()
             }
         }
@@ -260,17 +275,6 @@ class ViewController: UIViewController {
 
             animateCharacter(label, short: true)
         }
-    }
-    
-    private func square() {
-        let maxLength = self.view.bounds.size.height - 40
-        let length = CGFloat.random(in: 50...maxLength)
-        let point1 = CGPoint(x: self.view.center.x - (length / 2.0), y: self.view.center.y - (length / 2.0))
-        let point2 = CGPoint(x: self.view.center.x + (length / 2.0), y: self.view.center.y - (length / 2.0))
-        let point3 = CGPoint(x: self.view.center.x + (length / 2.0), y: self.view.center.y + (length / 2.0))
-        let point4 = CGPoint(x: self.view.center.x - (length / 2.0), y: self.view.center.y + (length / 2.0))
-        
-        quad(point1, point2, point3, point4)
     }
     
     private func rectangle() {
