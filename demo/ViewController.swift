@@ -242,8 +242,28 @@ class ViewController: UIViewController {
     @objc private func event() {
         shake(long: self.position < 16)
         
+        resetContentView()
+
         if self.position < 16 {
             randomize()
+        } else if self.position == 32 {
+            circle()
+            rotateContentView(full: false)
+        } else if self.position == 33 {
+            equilateralTriangle()
+            rotateContentView(full: false)
+        } else if self.position == 55 {
+            circle()
+            rotateContentView(full: true)
+        } else if self.position == 56 {
+            rectangle()
+            rotateContentView(full: true)
+        } else if self.position == 57 {
+            equilateralTriangle()
+            rotateContentView(full: true)
+        } else if self.position == 58 {
+            rectangle()
+            rotateContentView(full: true)
         } else {
             switch self.shapes[self.position] {
             case 0: rectangle()
@@ -431,5 +451,28 @@ class ViewController: UIViewController {
                 label.center = CGPoint(x: label.center.x + x, y: label.center.y + y)
             }, completion: nil)
         })
+    }
+    
+    private func resetContentView() {
+        self.contentView.layer.transform = CATransform3DIdentity
+        self.contentView.layer.transform.m34 = -0.002
+    }
+    
+    private func rotateContentView(full: Bool) {
+        let angleX = full ? 0 : (Double.random(in: 0.5...1.0) * (Bool.random() ? -1 : 1))
+        let angleY = full ? -Double.pi : (Double.random(in: 0.5...1.0) * (Bool.random() ? -1 : 1))
+        let timingFunction = full ? CAMediaTimingFunction(name: .linear) : CAMediaTimingFunction(name: .easeOut)
+        
+        let animationX = CABasicAnimation(keyPath: "transform.rotation.x")
+        animationX.toValue = NSNumber(floatLiteral: angleX)
+        animationX.duration = 1
+        animationX.timingFunction = timingFunction
+        self.contentView.layer.add(animationX, forKey: "rotationX")
+
+        let animationY = CABasicAnimation(keyPath: "transform.rotation.y")
+        animationY.toValue = NSNumber(floatLiteral: angleY)
+        animationY.duration = 1
+        animationY.timingFunction = timingFunction
+        self.contentView.layer.add(animationY, forKey: "rotationY")
     }
 }
