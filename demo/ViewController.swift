@@ -275,6 +275,18 @@ class ViewController: UIViewController {
             }
         }
         
+        if self.position >= 34 && self.position < 55 {
+            if Int.random(in: 0...2) == 0 {
+                rotateContentView(full: false)
+            }
+        } else if self.position >= 59 && self.position < 88 {
+            switch Int.random(in: 0...4) {
+            case 0: rotateContentView(full: false)
+            case 1: rotateContentView(full: true)
+            default: break
+            }
+        }
+        
         self.position += 1
     }
     
