@@ -242,8 +242,10 @@ class ViewController: UIViewController {
     @objc private func event() {
         shake(long: self.position < 16)
         
-        resetContentView()
-
+        if self.position >= 16 {
+            resetContentView()
+        }
+        
         if self.position < 16 {
             randomize()
         } else if self.position == 32 {
@@ -466,6 +468,7 @@ class ViewController: UIViewController {
     }
     
     private func resetContentView() {
+        self.contentView.layer.removeAllAnimations()
         self.contentView.layer.transform = CATransform3DIdentity
         self.contentView.layer.transform.m34 = -0.002
     }
