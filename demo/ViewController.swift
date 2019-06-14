@@ -266,6 +266,12 @@ class ViewController: UIViewController {
         } else if self.position == 58 {
             rectangle()
             rotateContentView(full: true)
+        } else if self.position == 88 {
+            equilateralTriangle()
+            rotateContentView(full: true)
+        } else if self.position == 89 {
+            circle()
+            end()
         } else {
             switch self.shapes[self.position] {
             case 0: rectangle()
@@ -290,6 +296,14 @@ class ViewController: UIViewController {
         }
         
         self.position += 1
+    }
+    
+    private func end() {
+        for (index, label) in self.labels.enumerated() {
+            UIView.animate(withDuration: 2, delay: TimeInterval(index) * 0.02, options: [.beginFromCurrentState], animations: {
+                label.alpha = 0
+            }, completion: nil)
+        }
     }
     
     private func shake(long: Bool) {
@@ -457,12 +471,14 @@ class ViewController: UIViewController {
         let offset: CGFloat = small ? 5 : 20
         let x = -offset + CGFloat.random(in: 0...(offset * 2))
         let y = -offset + CGFloat.random(in: 0...(offset * 2))
+        let endOffset = self.position == 90 ? x * 10 : 0
+        let longEndDuration: TimeInterval = self.position == 90 ? 8 : 1
         
         UIView.animate(withDuration: short ? 0.1 : self.animationDuration, delay: 0, options: [.curveLinear], animations: {
             label.center = CGPoint(x: label.center.x + x, y: label.center.y + y)
         }, completion: { _ in
-            UIView.animate(withDuration: short ? 8 : 1, delay: 0, options: [.curveEaseOut], animations: {
-                label.center = CGPoint(x: label.center.x + x, y: label.center.y + y)
+            UIView.animate(withDuration: short ? 8 : longEndDuration, delay: 0, options: [.curveEaseOut], animations: {
+                label.center = CGPoint(x: label.center.x + x + endOffset, y: label.center.y + y + endOffset)
             }, completion: nil)
         })
     }
