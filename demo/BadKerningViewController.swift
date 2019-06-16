@@ -270,7 +270,7 @@ class BadKerningViewController: UIViewController {
             equilateralTriangle()
             rotateContentView(full: true)
         } else if self.position == 89 {
-            circle()
+            circle(position: self.position)
             end()
         } else {
             switch self.shapes[self.position] {
@@ -355,7 +355,7 @@ class BadKerningViewController: UIViewController {
         quad(point1, point2, point3, point4)
     }
     
-    private func circle() {
+    private func circle(position: Int = 0) {
         let offset: CGFloat = 40
         let radius = CGFloat.random(in: 75...((self.view.bounds.size.height / 2.0) - offset))
         let shuffledLabels = self.labels.shuffled()
@@ -369,7 +369,7 @@ class BadKerningViewController: UIViewController {
                     y: self.view.center.y + (radius * sin(angle))
                 )
             }, completion: { _ in
-                self.animateCharacter(label, small: true)
+                self.animateCharacter(label, small: true, position: position)
             })
         }
     }
@@ -467,12 +467,12 @@ class BadKerningViewController: UIViewController {
         }
     }
     
-    private func animateCharacter(_ label: UIView, small: Bool = false, short: Bool = false) {
+    private func animateCharacter(_ label: UIView, small: Bool = false, short: Bool = false, position: Int = 0) {
         let offset: CGFloat = small ? 5 : 20
         let x = -offset + CGFloat.random(in: 0...(offset * 2))
         let y = -offset + CGFloat.random(in: 0...(offset * 2))
-        let endOffset = self.position == 90 ? x * 10 : 0
-        let longEndDuration: TimeInterval = self.position == 90 ? 8 : 1
+        let endOffset = position == 89 ? x * 10 : 0
+        let longEndDuration: TimeInterval = position == 89 ? 8 : 1
         
         UIView.animate(withDuration: short ? 0.1 : self.animationDuration, delay: 0, options: [.curveLinear], animations: {
             label.center = CGPoint(x: label.center.x + x, y: label.center.y + y)
